@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  quiz-bot:
+    build: .
+    environment:
+      - MATRIX_HOMESERVER=${MATRIX_HOMESERVER}
+      - MATRIX_BOT_USERNAME=${MATRIX_BOT_USERNAME}
+      - MATRIX_BOT_PASSWORD=${MATRIX_BOT_PASSWORD}
+      - MOODLE_SERVER=${MOODLE_SERVER}
+      - MOODLE_API_TOKEN=${MOODLE_API_TOKEN}
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
+    depends_on:
+      - database
+
+  # Optional: PostgreSQL database
+  database:
+    image: postgres:15
+    environment:
+      - POSTGRES_DB=quizbot
+      - POSTGRES_USER=quizbot
+      - POSTGRES_PASSWORD=secure_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  # Optional: Redis for caching
+  redis:
+    image: redis:7-alpine
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+
+volumes:
+  postgres_data:
+  redis_data:

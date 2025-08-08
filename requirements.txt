@@ -1,0 +1,18 @@
+# Matrix SDK for Python
+matrix-nio[e2e]==0.24.0
+
+# HTTP client for Moodle API
+aiohttp==3.9.1
+
+# Configuration management
+python-dotenv==1.0.0
+
+# Development dependencies
+pytest==7.4.3
+pytest-asyncio==0.21.1
+black==23.11.0
+flake8==6.1.0
+
+# Optional: Database support
+# sqlite3 (built-in to Python)
+# psycopg2-binary==2.9.9  # PostgreSQL support
