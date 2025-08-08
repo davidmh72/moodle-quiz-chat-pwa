@@ -72,64 +72,24 @@ function App() {
 
   const handleLogin = async (formData) => {
     try {
-      console.log('Attempting login with:', formData);
+      console.log('App.handleLogin called with:', formData);
       
-      // Demo mode - always succeed
-      if (formData.email === 'student@example.com' || !isOnline) {
-        // Create demo user
-        const demoUser = {
-          id: 'demo_user_1',
-          name: 'Demo Student',
-          email: formData.email,
-          username: 'demo_student'
-        };
-        
-        // Set demo token
-        moodleAPI.setToken('demo_token_12345');
-        
-        setUser(demoUser);
-        setCurrentView('courses');
-        
-        return { success: true };
-      }
+      // Force demo mode for now - always succeed with demo credentials
+      console.log('Using demo mode authentication');
       
-      // Try real authentication if online
-      if (isOnline) {
-        try {
-          const result = await moodleAPI.authenticate(
-            formData.email, 
-            formData.password, 
-            formData.server
-          );
-          
-          setUser(result.user);
-          setCurrentView('courses');
-          
-          return { success: true };
-        } catch (error) {
-          console.log('Real auth failed, falling back to demo mode');
-          
-          // Fallback to demo mode
-          const demoUser = {
-            id: 'demo_user_1',
-            name: 'Demo Student',
-            email: formData.email,
-            username: 'demo_student'
-          };
-          
-          moodleAPI.setToken('demo_token_12345');
-          setUser(demoUser);
-          setCurrentView('courses');
-          
-          return { success: true };
-        }
-      }
+      const result = await moodleAPI.authenticateDemo(formData.email);
+      
+      setUser(result.user);
+      setCurrentView('courses');
+      
+      console.log('Demo login successful:', result.user);
+      return { success: true };
       
     } catch (error) {
       console.error('Login error:', error);
       return { 
         success: false, 
-        error: 'Login failed. Please check your credentials.' 
+        error: 'Login failed. Please try again.' 
       };
     }
   };
